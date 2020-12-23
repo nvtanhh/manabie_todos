@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "230211233187",
+    "project_id": "manabie-todos-app",
+    "storage_bucket": "manabie-todos-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230211233187:android:64507229ef6b2aa98e2616",
+        "android_client_info": {
+          "package_name": "com.example.todos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230211233187-af5rsm5dmmlb7kg36utsfuns5k7f6d4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAijPrnX3IzXokiI0EJ2_GEBExntw1h9Pg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230211233187-af5rsm5dmmlb7kg36utsfuns5k7f6d4e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
