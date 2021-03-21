@@ -8,9 +8,8 @@ import 'package:todos/locator.dart';
 import 'package:todos/ui/widgets/todo_item.dart';
 
 class TodoBody extends StatefulWidget {
-  final int index;
-
-  TodoBody(this.index);
+  final int tapIndex;
+  TodoBody(this.tapIndex);
 
   @override
   _TodoBodyState createState() => _TodoBodyState();
@@ -24,13 +23,13 @@ class _TodoBodyState extends State<TodoBody> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    Stream<List<Todo>> _stream =
-        locator.get<TodoProvider>().getStream(widget.index);
+    // Stream<List<Todo>> _stream =
+    //     locator.get<TodoProvider>().getStream(widget.index);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
         body: StreamBuilder(
-            stream: _stream,
+            stream: locator.get<TodoProvider>().stream,
             builder:
                 (BuildContext context, AsyncSnapshot<List<Todo>> snapshot) {
               if (snapshot.connectionState == ConnectionState.active &&
@@ -45,7 +44,8 @@ class _TodoBodyState extends State<TodoBody> {
             }),
 
         //
-        floatingActionButton: _floadtingButton(),
+        floatingActionButton:
+            widget.tapIndex == 1 ? _floadtingButton() : SizedBox(),
       ),
     );
   }
@@ -64,7 +64,7 @@ class _TodoBodyState extends State<TodoBody> {
     int numComplete = locator.get<TodoProvider>().complete;
     var text1;
     var text2;
-    switch (widget.index) {
+    switch (widget.tapIndex) {
       case 0:
         text1 = "My Todos";
         text2 = numComplete.toString() + " complete todos";
@@ -90,7 +90,7 @@ class _TodoBodyState extends State<TodoBody> {
                 Container(
                   alignment: Alignment.center,
                   width: size.width * 0.2,
-                  child: (widget.index == 1)
+                  child: (widget.tapIndex == 1)
                       ? CircularPercentIndicator(
                           radius: 22,
                           lineWidth: 3,
@@ -155,8 +155,7 @@ class _TodoBodyState extends State<TodoBody> {
                 itemCount: todos.length,
                 itemBuilder: (BuildContext context, int index) {
                   Todo todo = todos[index];
-                  print(todo);
-                  return TodoItem(todo);
+                  return TodoItem(todo, editable: widget.tapIndex == 1);
                 })
             : Center(
                 child: Column(

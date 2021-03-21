@@ -8,13 +8,10 @@ import 'package:todos/core/services/auth_service.dart';
 import 'package:todos/locator.dart';
 import 'package:todos/ui/todo_body.dart';
 
-import 'core/providers/todo_provider.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setupLocator();
-
   runApp(MyTodosApp());
 }
 
@@ -36,6 +33,7 @@ class MyTodosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Todos',
       theme: ThemeData(
           accentColor: Color(0xFF3ACD96),
@@ -74,14 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // List<Widget> bodies = [CompleteTodos(), AllTodos(), IncompleteTodos()];
-
-  // final List<Stream<List<Todo>>> _streams = [
-  //   locator.get<TodoProvider>().completeTodosStream,
-  //   locator.get<TodoProvider>().allTodosStream,
-  //   locator.get<TodoProvider>().incompleteTodosStream
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -91,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
             snapshot.data != null) {
           return StreamBuilder<int>(
               stream: locator.get<TabIndexProvider>().stream,
+              initialData: 1,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.active &&
                     snapshot.data != null)
@@ -131,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void onTabTapped(int value) {
     locator.get<TabIndexProvider>().setCurrentIndex(value);
-    Future.delayed(new Duration(milliseconds: 30),
-        () => locator.get<TodoProvider>().sinkStream());
+    // Future.delayed(new Duration(milliseconds: 30),
+    //     () => locator.get<TodoProvider>().sinkStream());
   }
 }

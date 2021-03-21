@@ -93,8 +93,7 @@ class _TodoDetailState extends State<TodoDetail> {
               Navigator.pop(context);
               await saveTodo();
               EasyLoading.showSuccess('Saved!');
-              Future.delayed(new Duration(seconds: 1), () {
-              });
+              Future.delayed(new Duration(seconds: 1), () {});
             },
             child: Icon(
               Icons.save_rounded,
@@ -109,34 +108,6 @@ class _TodoDetailState extends State<TodoDetail> {
             .textTheme
             .headline5
             .copyWith(color: Colors.black87, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _floatingBtn() {
-    return new Container(
-      width: 50.0,
-      height: 50.0,
-      decoration: new BoxDecoration(
-        // border: ,
-        color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).primaryColor.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(1, 1), // changes position of shadow
-          ),
-        ],
-      ),
-      child: new IconButton(
-        icon: new Icon(
-          Icons.save,
-          color: Colors.white,
-        ),
-        onPressed: () {},
-        iconSize: 30.0,
       ),
     );
   }

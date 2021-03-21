@@ -26,6 +26,4 @@ class TodoService {
       return snapshot.docs.map((doc) => Todo.fromSnapshot(doc)).toList();
     });
   }
-
-  int getNumComplete() {}
 }

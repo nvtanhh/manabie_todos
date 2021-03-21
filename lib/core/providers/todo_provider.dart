@@ -1,88 +1,65 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:todos/core/models/todo.dart';
 import 'package:todos/core/services/todo_service.dart';
 
 class TodoProvider extends ChangeNotifier {
   TodoService _service = TodoService();
-  StreamController todosController =
-      new StreamController<List<Todo>>.broadcast();
 
-  List<Todo> todos = [];
+  var _subject = BehaviorSubject<List<Todo>>();
+  List<Todo> _todos = [];
+
   int total = 0;
   int complete = 0;
 
   TodoProvider() {
-    _service.todos().asBroadcastStream().listen((todos) {
-      this.todos = todos;
-      todosController.sink.add(todos);
+    _service.todos().listen((todos) {
+      _todos = todos.reversed.toList();
+      _subject.add(_todos);
       this.total = todos.length;
       this.complete = todos.where((todo) => todo.isCompleted).length;
     });
     _service.todos();
   }
 
-  Future<void> addNewTodo(Todo todo) {
-    return _service.addNewTodo(todo);
+  get stream => _subject.stream;
+
+  void addNewTodo(Todo todo) {
+    _service.addNewTodo(todo);
+    notifyListeners();
   }
 
-  Future<void> deleteTodo(Todo todo) async {
-    return _service.deleteTodo(todo);
+  void deleteTodo(Todo todo) async {
+    _service.deleteTodo(todo);
+    notifyListeners();
   }
 
-  Future<void> updateTodo(Todo todo) {
-    return _service.updateTodo(todo);
-  }
-
-  var completeTodos = StreamTransformer<List<Todo>, List<Todo>>.fromHandlers(
-      handleData: (data, sink) {
-    List<Todo> todos = data.where((todo) => todo.isCompleted).toList();
-    sink.add(todos);
-  });
-
-  var incompleteTodos = StreamTransformer<List<Todo>, List<Todo>>.fromHandlers(
-      handleData: (data, sink) {
-    List<Todo> todos = data.where((todo) => !todo.isCompleted).toList();
-    sink.add(todos);
-  });
-
-  Stream<List<Todo>> fetchAllTodoAsStream() {
-    return _service.todos();
-  }
-
-  Stream<List<Todo>> get completeTodosStream =>
-      todosController.stream.transform(completeTodos);
-
-  Stream<List<Todo>> get incompleteTodosStream =>
-      todosController.stream.transform(incompleteTodos);
-
-  Stream<List<Todo>> get allTodosStream => todosController.stream;
-
-  Stream<List<Todo>> getStream(tabIndex) {
-    switch (tabIndex) {
-      case 0:
-        return completeTodosStream;
-        break;
-      case 1:
-        return allTodosStream;
-        break;
-      case 2:
-        return incompleteTodosStream;
-        break;
-      default:
-        return null;
-    }
+  void updateTodo(Todo todo) {
+    _service.updateTodo(todo);
+    notifyListeners();
   }
 
   @override
   void dispose() {
     super.dispose();
-    todosController.close();
+    _subject.close();
   }
 
-  void sinkStream() {
-    print('sink');
-    todosController.sink.add(this.todos);
+  void changeTap(int index) {
+    switch (index) {
+      case 0:
+        List<Todo> completeTodos =
+            _todos.where((todo) => todo.isCompleted).toList();
+        _subject.add(completeTodos);
+        break;
+      case 1:
+        _subject.add(_todos);
+        break;
+      case 2:
+        List<Todo> incompleteTodos =
+            _todos.where((todo) => !todo.isCompleted).toList();
+        _subject.add(incompleteTodos);
+        break;
+    }
   }
 }

@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:todos/core/providers/todo_provider.dart';
-import 'package:todos/locator.dart';
+
+import '../../locator.dart';
+import 'todo_provider.dart';
 
 class TabIndexProvider extends ChangeNotifier {
   int currentIndex = 1;
-  final StreamController _controller = new StreamController<int>();
+  final StreamController _controller = StreamController<int>();
+  var _todoProvider = locator<TodoProvider>();
 
   TabIndexProvider() {
     currentIndex = 1;
@@ -21,6 +23,13 @@ class TabIndexProvider extends ChangeNotifier {
     if (currentIndex != index) {
       currentIndex = index;
       _controller.sink.add(index);
+      _todoProvider.changeTap(index);
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.close();
   }
 }
