@@ -23,13 +23,12 @@ class _TodoBodyState extends State<TodoBody> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    // Stream<List<Todo>> _stream =
-    //     locator.get<TodoProvider>().getStream(widget.index);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: StreamBuilder(
+        body: StreamBuilder<List<Todo>>(
             stream: locator.get<TodoProvider>().stream,
+            initialData: [],
             builder:
                 (BuildContext context, AsyncSnapshot<List<Todo>> snapshot) {
               if (snapshot.connectionState == ConnectionState.active &&
@@ -161,7 +160,10 @@ class _TodoBodyState extends State<TodoBody> {
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('assets/empty.svg'),
+                  Image.asset(
+                    'assets/empty.png',
+                    width: size.width * 0.6,
+                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -171,7 +173,10 @@ class _TodoBodyState extends State<TodoBody> {
                         .textTheme
                         .bodyText1
                         .copyWith(color: Colors.black54),
-                  )
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
                 ],
               )));
   }

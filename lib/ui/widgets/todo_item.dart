@@ -43,11 +43,8 @@ class TodoItem extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Visibility(
-                      visible: editable,
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
+                    IgnorePointer(
+                      ignoring: !editable,
                       child: Container(
                           alignment: Alignment.topCenter,
                           width: size.width * 0.2,
