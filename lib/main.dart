@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           BottomNavigationBarItem(
                               icon:
                                   new Icon(FontAwesomeIcons.solidCalendarCheck),
-                              label: "Complete"),
+                              label: "Completed"),
                           BottomNavigationBarItem(
                               icon: new Icon(FontAwesomeIcons.solidListAlt),
                               label: "All"),
